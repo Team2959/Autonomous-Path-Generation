@@ -7,7 +7,7 @@ function ControlToInverted(wayPoint, controlPoint){
 }
 
 // find the current position according to the equation and time
-function CurrentPosition(tTime, wayPointA, controlPointA, wayPointB, invertedPointB){
+function CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime){
     var currentPoint = [];
     currentPoint[0] = 	(3*(1-tTime)*(1-tTime)*(1-tTime))*wayPointA[0] + 
   						(3*(1-tTime)*(1-tTime))*controlPointA[0] + 
@@ -21,7 +21,7 @@ function CurrentPosition(tTime, wayPointA, controlPointA, wayPointB, invertedPoi
 }
 
 // find the left wheel position according to the equation and time
-function LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, angle, tTime, robotWidth){
+function LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime, angle, robotWidth){
     var Leftpoint = [];
     var robotHalfWidth = robotWidth/2;
     var shiftX = robotHalfWidth*Math.sin(angle);
@@ -38,7 +38,7 @@ function LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, angle
 }
 
 // find the right wheel position according to the equation and time
-function RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, angle, tTime, robotWidth){
+function RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime, angle, robotWidth){
     var rightPoint = [];
     var robotHalfWidth = robotWidth/2;
     var shiftX = robotHalfWidth*Math.sin(angle);
@@ -54,22 +54,46 @@ function RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, angl
     return rightPoint;
 }
 
+// find the angle where the robot is heading to
+function FindHeadingAngle(currentPoint, pastPoint){
+    return Math.atan((currentPoint[0]-pastPoint[0])/(currentPoint[1]-pastPoint[1]))/Math.PI()+"π"+" radian(s)";
+}
 
-//still working on it
+// find the distance between points
+function MessureDistanceBetweenPoints(pointA, pointB){
+    return Math.sqrt(Math.pow((pointA[0]-pointB[0]),2)+Math.pow((pointA[1]-pointB[1]),2));
+}
+
 // main function
-function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB){
+function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, robotWidth){
+    var allData = [times, lVelocity, rVelocity, headingAngle];
     var times = [];
 	var lVelocity = [];
     var rVelocity = [];
-    var heading = [];
-  
-    var timeFrequency = 1;
-    var kTime = 100;
+    var headingAngle = [];
+    
+    var invertedPointB = ControlToInverted(wayPointB, controlPointB);
+
+    var timeFrequency = 0.01;
+    var kTime = 10000;
     var kVelocity = 1000;
-  
-    for (var i = 0; i < 100; i++){
-  	    times.push(i*kTime);
+    
+    var timeDifferent = 0.001;
+    var currentPoint = CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime);
+    var pastPoint    = CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime - timeDifferent);
+    
+    for (var i = 0; i < 1; i = i + timeFrequency){
+        times.push(i*kTime);
+        headingAngle.push(FindHeadingAngle(currentPoint, pastPoint));
+
+        var currentLeft  = LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime, angle, robotWidth);
+        var pastLeft     = LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime - timeDifferent, angle, robotWidth);
+        var currentRight = RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime, angle, robotWidth);
+        var pastRight    = RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime - timeDifferent, angle, robotWidth);
+        
+        lVelocity.push(((MessureDistanceBetweenPoints(currentLeft, pastLeft))/timeDifferent)*kVelocity);
+        rVelocity.push(((MessureDistanceBetweenPoints(currentRight, pastRight))/timeDifferent)*kVelocity);
 	}
-    return times;
+    return allData;
 }
-//document.write(CubicBezierSpline(0,0));
+// document.write(CubicBezierSpline([0,0],[3,0],[5,5],[8,5]));
