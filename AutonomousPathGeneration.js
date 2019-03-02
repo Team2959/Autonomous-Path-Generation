@@ -76,7 +76,7 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
 
     var timeFrequency = 0.01;
     var kTime = 10000;
-    var kVelocity = 1000;
+    var kVelocityMax = 1000;
     
     var timeDifferent = 0.001;
     var currentPoint = CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime);
@@ -91,8 +91,8 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
         var currentRight = RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime, angle, robotWidth);
         var pastRight    = RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime - timeDifferent, angle, robotWidth);
         
-        lVelocity.push(((MessureDistanceBetweenPoints(currentLeft, pastLeft))/timeDifferent)*kVelocity);
-        rVelocity.push(((MessureDistanceBetweenPoints(currentRight, pastRight))/timeDifferent)*kVelocity);
+        lVelocity.push(((MessureDistanceBetweenPoints(currentLeft, pastLeft))/timeDifferent)*kVelocityMax);
+        rVelocity.push(((MessureDistanceBetweenPoints(currentRight, pastRight))/timeDifferent)*kVelocityMax);
 	}
     return allData;
 }
