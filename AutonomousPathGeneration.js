@@ -106,7 +106,7 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
     var currentLeft = [[(wayPointA[0]-robotWidth/2*Math.sin(0)),(wayPointA[1]+robotWidth/2*Math.cos(0))]];
     var currentRight = [[(wayPointA[0]+robotWidth/2*Math.sin(0)),(wayPointA[1]-robotWidth/2*Math.cos(0))]];
     for (var i = 0; i < 1; i = i + timeFrequency){
-        times.push(i*kTime);
+        times.push(Math.round(i*kTime));
 
         currentPoint.push(CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i));
         headingAngle.push(FindHeadingAngle(currentPoint[Math.round(i/timeFrequency)+1], currentPoint[Math.round(i/timeFrequency)]));
@@ -138,4 +138,4 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
         return "Re Enter:";
     }
 }
-// console.log(CubicBezierSpline([0,0],[3,0],[5,5],[8,5],2,0.01,"lVelocity"));
+console.log(CubicBezierSpline([0,0],[3,0],[5,5],[8,5],2,0.01,"headingAngleDecimal"));
