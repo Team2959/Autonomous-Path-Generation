@@ -3,7 +3,7 @@
     // - download node.js
     // - download "npm install fractional" through node.js command line
 
-var Fraction = require('fractional').Fraction
+var Fraction = require('fractional').Fraction;
 
 // find inverted control point by using the convert point input
 function ControlToInverted(wayPoint, controlPoint){
@@ -87,17 +87,18 @@ function MessureDistanceBetweenPoints(pointA, pointB){
 }
 
 // main function
-function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, robotWidth, timeFrequency, ask){
-    // var allData = [times, lVelocity, rVelocity, headingAngleDecimal, headingAngleFraction];
+function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, robotWidth, timeFrequency){
     var times = [];
 	var lVelocity = [];
     var rVelocity = [];
     var headingAngle = [];
     var headingAngleDecimal = [];
     var headingAngleFraction = [];
-    
-    var invertedPointB = ControlToInverted(wayPointB, controlPointB);
+    var allData = [times, lVelocity, rVelocity, headingAngleDecimal, headingAngleFraction];
 
+    var invertedPointB = ControlToInverted(wayPointB, controlPointB);
+    
+    // assume that time is proportional to percent through the route
     var kTime = 10000;
     var kVelocityMax = 1000;
     
@@ -105,6 +106,7 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
     // assume that staring point has zero angle degree
     var currentLeft = [[(wayPointA[0]-robotWidth/2*Math.sin(0)),(wayPointA[1]+robotWidth/2*Math.cos(0))]];
     var currentRight = [[(wayPointA[0]+robotWidth/2*Math.sin(0)),(wayPointA[1]-robotWidth/2*Math.cos(0))]];
+
     for (var i = 0; i < 1; i = i + timeFrequency){
         times.push(Math.round(i*kTime));
 
@@ -117,25 +119,7 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
         
         lVelocity.push(((MessureDistanceBetweenPoints(currentLeft[Math.round(i/timeFrequency)+1], currentLeft[Math.round(i/timeFrequency)]))/timeFrequency)*kVelocityMax);
         rVelocity.push(((MessureDistanceBetweenPoints(currentRight[Math.round(i/timeFrequency)+1], currentRight[Math.round(i/timeFrequency)]))/timeFrequency)*kVelocityMax);
-
     }
-    if(ask == "times"){
-        return times;
-    }
-    else if(ask == "lVelocity"){
-        return lVelocity;
-    }
-    else if(ask == "rVelocity"){
-        return rVelocity;
-    }
-    else if(ask == "headingAngleDecimal"){
-        return headingAngleDecimal;
-    }
-    else if(ask == "headingAngleFraction"){
-        return headingAngleFraction;
-    }
-    else{
-        return "Re Enter:";
-    }
+    return allData;
 }
-console.log(CubicBezierSpline([0,0],[3,0],[5,5],[8,5],2,0.01,"headingAngleDecimal"));
+console.log(CubicBezierSpline([0,0],[3,0],[5,5],[8,5],2,0.01));
