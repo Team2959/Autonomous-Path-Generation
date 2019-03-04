@@ -64,11 +64,16 @@ function RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTim
 }
 
 // find the angle where the robot is heading to
-function FindHeadingAngle(currentPoint, pastPoint){
-    if (currentPoint[1]-pastPoint[1] == 0){
-        return 0;
-    }
-    return Math.atan((currentPoint[0]-pastPoint[0])/(currentPoint[1]-pastPoint[1]));
+function FindHeadingAngle(wayPointA, controlPointA, wayPointB, invertedPointB, tTime){
+    var dxdt =  (3*(1-tTime)*(1-tTime))*(controlPointA[0]-wayPointA[0]) + 
+                (6*(1-tTime)*tTime)*(invertedPointB[0]-controlPointA[0]) +
+                (3*tTime*tTime)*(wayPointB[0]-invertedPointB[0]);
+    // console.log(dxdt);
+    var dydt =  (3*(1-tTime)*(1-tTime))*(controlPointA[1]-wayPointA[1]) + 
+                (6*(1-tTime)*tTime)*(invertedPointB[1]-controlPointA[1]) +
+                (3*tTime*tTime)*(wayPointB[1]-invertedPointB[1]);
+    // console.log(dydt);
+    return Math.atan2(dydt, dxdt);
 }
 
 // convert radian to a readble radian
@@ -111,7 +116,7 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
         times.push(Math.round(i*kTime));
 
         currentPoint.push(CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i));
-        headingAngle.push(FindHeadingAngle(currentPoint[Math.round(i/timeFrequency)+1], currentPoint[Math.round(i/timeFrequency)]));
+        headingAngle.push(FindHeadingAngle(wayPointA, controlPointA, wayPointB, invertedPointB, i));
         headingAngleDecimal.push(NumberToDecimalRadian(headingAngle[Math.round(i/timeFrequency)]));
         headingAngleFraction.push(NumberToFractionRadian(headingAngle[Math.round(i/timeFrequency)]));
         currentLeft.push(LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i, headingAngle[Math.round(i/timeFrequency)], robotWidth));
