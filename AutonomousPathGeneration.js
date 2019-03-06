@@ -16,14 +16,14 @@ function ControlToInverted(wayPoint, controlPoint){
 // find the current position according to the equation and time
 function CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime){
     var currentPoint = [];
-    currentPoint[0] = 	((1-tTime)*(1-tTime)*(1-tTime))*wayPointA[0] + 
-  						(3*(1-tTime)*(1-tTime)*tTime)*controlPointA[0] + 
-              			(3*(1-tTime)*tTime*tTime)*invertedPointB[0] + 
-              			(tTime*tTime*tTime)*wayPointB[0];
-    currentPoint[1] =   ((1-tTime)*(1-tTime)*(1-tTime))*wayPointA[1] + 
-  		    			(3*(1-tTime)*(1-tTime)*tTime)*controlPointA[1] + 
-              	    	(3*(1-tTime)*tTime*tTime)*invertedPointB[1] + 
-                        (tTime*tTime*tTime)*wayPointB[1];           
+    currentPoint[0] = 	((1-tTime)*(1-tTime)*(1-tTime)) * wayPointA[0] + 
+  						(3*(1-tTime)*(1-tTime)*tTime) * controlPointA[0] + 
+              			(3*(1-tTime)*tTime*tTime) * invertedPointB[0] + 
+              			(tTime*tTime*tTime) * wayPointB[0];
+    currentPoint[1] =   ((1-tTime)*(1-tTime)*(1-tTime)) * wayPointA[1] + 
+  		    			(3*(1-tTime)*(1-tTime)*tTime) * controlPointA[1] + 
+              	    	(3*(1-tTime)*tTime*tTime) * invertedPointB[1] + 
+                        (tTime*tTime*tTime) * wayPointB[1];           
     return currentPoint;
 }
 
@@ -33,14 +33,14 @@ function LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTime
     var robotHalfWidth = robotWidth/2;
     var shiftX = robotHalfWidth*Math.sin(angle);
     var shiftY = robotHalfWidth*Math.cos(angle);
-	Leftpoint[0] = 	((1-tTime)*(1-tTime)*(1-tTime))*(wayPointA[0]-shiftX) + 
-                    (3*(1-tTime)*(1-tTime)*tTime)*(controlPointA[0]-shiftX) + 
-            		(3*(1-tTime)*tTime*tTime)*(invertedPointB[0]-shiftX) + 
-            		(tTime*tTime*tTime)*(wayPointB[0]-shiftX);
-    Leftpoint[1] = 	((1-tTime)*(1-tTime)*(1-tTime))*(wayPointA[1]+shiftY) + 
-                    (3*(1-tTime)*(1-tTime)*tTime)*(controlPointA[1]+shiftY) + 
-                    (3*(1-tTime)*tTime*tTime)*(invertedPointB[1]+shiftY) + 
-                    (tTime*tTime*tTime)*(wayPointB[1]+shiftY);
+	Leftpoint[0] = 	((1-tTime)*(1-tTime)*(1-tTime)) * (wayPointA[0]-shiftX) + 
+                    (3*(1-tTime)*(1-tTime)*tTime) * (controlPointA[0]-shiftX) + 
+            		(3*(1-tTime)*tTime*tTime) * (invertedPointB[0]-shiftX) + 
+            		(tTime*tTime*tTime) * (wayPointB[0]-shiftX);
+    Leftpoint[1] = 	((1-tTime)*(1-tTime)*(1-tTime)) * (wayPointA[1]+shiftY) + 
+                    (3*(1-tTime)*(1-tTime)*tTime) * (controlPointA[1]+shiftY) + 
+                    (3*(1-tTime)*tTime*tTime) * (invertedPointB[1]+shiftY) + 
+                    (tTime*tTime*tTime) * (wayPointB[1]+shiftY);
     // console.log(shiftX);
     // console.log(shiftY);
     return Leftpoint;
@@ -52,27 +52,27 @@ function RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, tTim
     var robotHalfWidth = robotWidth/2;
     var shiftX = robotHalfWidth*Math.sin(angle);
     var shiftY = robotHalfWidth*Math.cos(angle);
-    rightPoint[0] = ((1-tTime)*(1-tTime)*(1-tTime))*(wayPointA[0]+shiftX) + 
-                    (3*(1-tTime)*(1-tTime)*tTime)*(controlPointA[0]+shiftX) + 
-                    (3*(1-tTime)*tTime*tTime)*(invertedPointB[0]+shiftX) + 
-              		(tTime*tTime*tTime)*(wayPointB[0]+shiftX);
-    rightPoint[1] = ((1-tTime)*(1-tTime)*(1-tTime))*(wayPointA[1]-shiftY) + 
-                    (3*(1-tTime)*(1-tTime)*tTime)*(controlPointA[1]-shiftY) + 
-                    (3*(1-tTime)*tTime*tTime)*(invertedPointB[1]-shiftY) + 
-              		(tTime*tTime*tTime)*(wayPointB[1]-shiftY);
+    rightPoint[0] = ((1-tTime)*(1-tTime)*(1-tTime)) * (wayPointA[0]+shiftX) + 
+                    (3*(1-tTime)*(1-tTime)*tTime) * (controlPointA[0]+shiftX) + 
+                    (3*(1-tTime)*tTime*tTime) * (invertedPointB[0]+shiftX) + 
+              		(tTime*tTime*tTime) * (wayPointB[0]+shiftX);
+    rightPoint[1] = ((1-tTime)*(1-tTime)*(1-tTime)) * (wayPointA[1]-shiftY) + 
+                    (3*(1-tTime)*(1-tTime)*tTime) * (controlPointA[1]-shiftY) + 
+                    (3*(1-tTime)*tTime*tTime) * (invertedPointB[1]-shiftY) + 
+              		(tTime*tTime*tTime) * (wayPointB[1]-shiftY);
     return rightPoint;
 }
 
 // find the angle where the robot is heading to
 function FindHeadingAngle(wayPointA, controlPointA, wayPointB, invertedPointB, tTime){
-    var dxdt =  (3*(1-tTime)*(1-tTime))*(controlPointA[0]-wayPointA[0]) + 
-                (6*(1-tTime)*tTime)*(invertedPointB[0]-controlPointA[0]) +
-                (3*tTime*tTime)*(wayPointB[0]-invertedPointB[0]);
-    // console.log(dxdt);
-    var dydt =  (3*(1-tTime)*(1-tTime))*(controlPointA[1]-wayPointA[1]) + 
-                (6*(1-tTime)*tTime)*(invertedPointB[1]-controlPointA[1]) +
-                (3*tTime*tTime)*(wayPointB[1]-invertedPointB[1]);
-    // console.log(dydt);
+    var dxdt =  (3*(1-tTime)*(1-tTime)) * (controlPointA[0]-wayPointA[0]) + 
+                (6*(1-tTime)*tTime) * (invertedPointB[0]-controlPointA[0]) +
+                (3*tTime*tTime) * (wayPointB[0]-invertedPointB[0]);
+
+    var dydt =  (3*(1-tTime)*(1-tTime)) * (controlPointA[1]-wayPointA[1]) + 
+                (6*(1-tTime)*tTime) * (invertedPointB[1]-controlPointA[1]) +
+                (3*tTime*tTime) * (wayPointB[1]-invertedPointB[1]);
+
     return Math.atan2(dydt, dxdt);
 }
 
@@ -83,13 +83,26 @@ function NumberToDecimalRadian(number){
 
 // convert radian to a readble radian
 function NumberToFractionRadian(number){
-    return "(" + new Fraction(number/Math.PI).toString() + ")" + "π"+" radian(s)"; 
+    return "(" + new Fraction(number/Math.PI).toString() + ")" + "π" + " radian(s)"; 
 }
 
 // find the distance between points
 function MessureDistanceBetweenPoints(pointA, pointB){
-    return Math.sqrt(Math.pow((pointA[0]-pointB[0]),2)+Math.pow((pointA[1]-pointB[1]),2));
+    return Math.sqrt(Math.pow((pointA[0]-pointB[0]), 2) + Math.pow((pointA[1]-pointB[1]), 2));
 }
+
+// find the robot velocity
+function RobotVelocity(wayPointA, controlPointA, wayPointB, invertedPointB, tTime){
+    var dxdt =  (3*(1-tTime)*(1-tTime)) * (controlPointA[0]-wayPointA[0]) + 
+                (6*(1-tTime)*tTime) * (invertedPointB[0]-controlPointA[0]) +
+                (3*tTime*tTime) * (wayPointB[0]-invertedPointB[0]);
+
+    var dydt =  (3*(1-tTime)*(1-tTime)) * (controlPointA[1]-wayPointA[1]) + 
+                (6*(1-tTime)*tTime) * (invertedPointB[1]-controlPointA[1]) +
+                (3*tTime*tTime) * (wayPointB[1]-invertedPointB[1]);
+
+    return dydt / dxdt;
+} 
 
 // main function
 function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, robotWidth, timeFrequency){
@@ -114,7 +127,7 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
 
     for (var i = 0; i < 1; i = i + timeFrequency){
         times.push(Math.round(i*kTime));
-
+ 
         currentPoint.push(CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i));
         headingAngle.push(FindHeadingAngle(wayPointA, controlPointA, wayPointB, invertedPointB, i));
         headingAngleDecimal.push(NumberToDecimalRadian(headingAngle[Math.round(i/timeFrequency)]));
@@ -127,4 +140,4 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
     }
     return allData;
 }
-console.log(CubicBezierSpline([0,0],[3,0],[5,5],[8,5],2,0.01));
+console.log(CubicBezierSpline([0,0], [3,0], [5,5], [8,5], 2, 0.01));
