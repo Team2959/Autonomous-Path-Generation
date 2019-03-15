@@ -120,7 +120,7 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
     var kTime = 10000;
     var kVelocityMax = 1000;
     
-    var currentPoint = [wayPointA];
+    // var currentPoint = [wayPointA];
     // assume that staring point has zero angle degree
     var currentLeft = [[(wayPointA[0]-robotWidth/2*Math.sin(0)),(wayPointA[1]+robotWidth/2*Math.cos(0))]];
     var currentRight = [[(wayPointA[0]+robotWidth/2*Math.sin(0)),(wayPointA[1]-robotWidth/2*Math.cos(0))]];
@@ -128,16 +128,21 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
     for (var i = 0; i < 1; i = i + timeFrequency){
         times.push(Math.round(i*kTime));
  
-        currentPoint.push(CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i));
+        // currentPoint.push(CurrentPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i));
+
         headingAngle.push(FindHeadingAngle(wayPointA, controlPointA, wayPointB, invertedPointB, i));
         headingAngleDecimal.push(NumberToDecimalRadian(headingAngle[Math.round(i/timeFrequency)]));
         headingAngleFraction.push(NumberToFractionRadian(headingAngle[Math.round(i/timeFrequency)]));
+
         currentLeft.push(LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i, headingAngle[Math.round(i/timeFrequency)], robotWidth));
         currentRight.push(RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i, headingAngle[Math.round(i/timeFrequency)], robotWidth));
         
         lVelocity.push(((MessureDistanceBetweenPoints(currentLeft[Math.round(i/timeFrequency)+1], currentLeft[Math.round(i/timeFrequency)]))/timeFrequency)*kVelocityMax);
         rVelocity.push(((MessureDistanceBetweenPoints(currentRight[Math.round(i/timeFrequency)+1], currentRight[Math.round(i/timeFrequency)]))/timeFrequency)*kVelocityMax);
+
+        lVelocity.splice(0, 1, 0);
+        rVelocity.splice(0, 1, 0);
     }
     return allData;
 }
-console.log(CubicBezierSpline([0,0], [3,0], [5,5], [8,5], 2, 0.01));
+console.log(CubicBezierSpline([0,0], [1,1], [3,3], [4,4], 2, 0.1));
