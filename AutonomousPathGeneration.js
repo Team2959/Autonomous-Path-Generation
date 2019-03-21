@@ -3,8 +3,7 @@
     // - download node.js
     // - download "npm install fractional" through node.js command line
 
-var Fraction = require('fractional').Fraction;
-
+// var Fraction = require('fractional').Fraction;
 // find inverted control point by using the convert point input
 function ControlToInverted(wayPoint, controlPoint){
     var invertedPoint = [];
@@ -111,16 +110,16 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
     var rVelocity = [];
     var headingAngle = [];
     var headingAngleDecimal = [];
-    var headingAngleFraction = [];
-    var allData = [times, lVelocity, rVelocity, headingAngleDecimal, headingAngleFraction];
+    // var headingAngleFraction = [];
 
+    // var allData = [times, lVelocity, rVelocity, headingAngleDecimal, headingAngleFraction];
+    var allData = [times, lVelocity, rVelocity, headingAngleDecimal];
     var invertedPointB = ControlToInverted(wayPointB, controlPointB);
     
     // assume that time is proportional to percent through the route
     var kTime = 10000;
     var kVelocityMax = 1000;
-    
-    // var currentPoint = [wayPointA];
+        
     // assume that staring point has zero angle degree
     var currentLeft = [[(wayPointA[0]-robotWidth/2*Math.sin(0)),(wayPointA[1]+robotWidth/2*Math.cos(0))]];
     var currentRight = [[(wayPointA[0]+robotWidth/2*Math.sin(0)),(wayPointA[1]-robotWidth/2*Math.cos(0))]];
@@ -132,7 +131,7 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
 
         headingAngle.push(FindHeadingAngle(wayPointA, controlPointA, wayPointB, invertedPointB, i));
         headingAngleDecimal.push(NumberToDecimalRadian(headingAngle[Math.round(i/timeFrequency)]));
-        headingAngleFraction.push(NumberToFractionRadian(headingAngle[Math.round(i/timeFrequency)]));
+        // headingAngleFraction.push(NumberToFractionRadian(headingAngle[Math.round(i/timeFrequency)]));
 
         currentLeft.push(LeftPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i, headingAngle[Math.round(i/timeFrequency)], robotWidth));
         currentRight.push(RightPosition(wayPointA, controlPointA, wayPointB, invertedPointB, i, headingAngle[Math.round(i/timeFrequency)], robotWidth));
@@ -145,4 +144,3 @@ function CubicBezierSpline (wayPointA, controlPointA, wayPointB, controlPointB, 
     }
     return allData;
 }
-console.log(CubicBezierSpline([0,0], [1,1], [3,3], [4,4], 2, 0.1));

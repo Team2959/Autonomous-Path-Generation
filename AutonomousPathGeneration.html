@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="/PrepData.js"></script>
+    <script type="text/javascript" src="/AutonomousPathGeneration.js"></script>
+    <title>Cubic Bezier Spline</title>
+</head>
+<body>
+    <script type="text/javascript">
+        console.log(PrepData(["time", "left velocity", "right velocity", "angle in decimal"] ,CubicBezierSpline([0,0], [1,1], [3,3], [4,4], 2, 0.1)));
+    </script>
+</body>
+</html>
